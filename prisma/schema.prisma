@@ -1,0 +1,246 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==========================================
+// Better Auth Core Tables
+// ==========================================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  phone         String?   @unique
+  role          UserRole  @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions      Session[]
+  accounts      Account[]
+  orders        Order[]
+  addresses     Address[]
+
+  @@map("user")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  STAFF
+  SUPER_ADMIN
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("verification")
+}
+
+// ==========================================
+// E-Commerce Product Catalog
+// ==========================================
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  image       String?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("category")
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  tagline     String?
+  description String
+  ingredients String?
+  features    String[]         @default([])
+  shelfLife   String?          // e.g., "90 Days"
+  isFeatured  Boolean          @default(false)
+  isActive    Boolean          @default(true)
+  categoryId  String
+  category    Category         @relation(fields: [categoryId], references: [id])
+  variants    ProductVariant[]
+  images      ProductImage[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@map("product")
+}
+
+model ProductVariant {
+  id          String      @id @default(cuid())
+  productId   String
+  product     Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  weight      String      // e.g. "250g", "500g", "1kg"
+  price       Decimal     @db.Decimal(10, 2)
+  mrp         Decimal     @db.Decimal(10, 2)
+  stock       Int         @default(100)
+  sku         String      @unique
+  orderItems  OrderItem[]
+
+  @@map("product_variant")
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  isPrimary Boolean  @default(false)
+
+  @@map("product_image")
+}
+
+// ==========================================
+// Orders, Checkout & Delivery
+// ==========================================
+
+model Address {
+  id             String   @id @default(cuid())
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  fullName       String
+  phone          String
+  alternatePhone String?
+  streetAddress  String
+  landmark       String?
+  city           String
+  state          String
+  pincode        String
+  orders         Order[]
+  createdAt      DateTime @default(now())
+
+  @@map("address")
+}
+
+model Order {
+  id             String         @id @default(cuid())
+  orderNumber    String         @unique // e.g. "BB-202611-001"
+  userId         String?
+  user           User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  guestEmail     String?
+  guestPhone     String?
+  addressId      String
+  address        Address        @relation(fields: [addressId], references: [id])
+  totalAmount    Decimal        @db.Decimal(10, 2)
+  shippingFee    Decimal        @default(0.00) @db.Decimal(10, 2)
+  discountAmount Decimal        @default(0.00) @db.Decimal(10, 2)
+  finalAmount    Decimal        @db.Decimal(10, 2)
+  status         OrderStatus    @default(CONFIRMED)
+  items          OrderItem[]
+  payment        Payment?
+  customerNotes  String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@map("order")
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  PROCESSING
+  DISPATCHED
+  DELIVERED
+  CANCELLED
+}
+
+model OrderItem {
+  id               String         @id @default(cuid())
+  orderId          String
+  order            Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productVariantId String
+  variant          ProductVariant @relation(fields: [productVariantId], references: [id])
+  quantity         Int
+  price            Decimal        @db.Decimal(10, 2)
+
+  @@map("order_item")
+}
+
+// ==========================================
+// Direct UPI Payment & UTR Audit
+// ==========================================
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String        @unique
+  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method        PaymentMethod @default(UPI)
+  amount        Decimal       @db.Decimal(10, 2)
+  upiVpa        String        @default("7281991952@upi")
+  upiTxnRef     String?       // 12-digit UTR/Bank Reference ID
+  status        PaymentStatus @default(PENDING_VERIFICATION)
+  verifiedAt    DateTime?
+  verifiedBy    String?       // Admin user ID who audited the transaction
+  screenshotUrl String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@map("payment")
+}
+
+enum PaymentMethod {
+  UPI
+  COD
+}
+
+enum PaymentStatus {
+  PENDING_VERIFICATION
+  PAID
+  FAILED
+  REFUNDED
+}
