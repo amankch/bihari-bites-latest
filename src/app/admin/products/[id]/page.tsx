@@ -11,6 +11,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { ImageUploader } from "@/components/admin/image-uploader";
 
+const CATEGORIES = [
+  { name: "Sweets & Traditional Snacks (Khasta Thekua)", slug: "sweets-snacks" },
+  { name: "Sattu & Superfoods (Roasted Chana Sattu)", slug: "staples-superfoods" },
+  { name: "Bihari Aachar & Chutney (Lal Mirch Bharua, Aam)", slug: "pickles-aachar" },
+  { name: "Pure Bilona Desi Ghee (Danedar Cow Ghee)", slug: "pure-desi-ghee" },
+];
+
 export default function EditProductPage({
   params,
 }: {
@@ -34,13 +41,14 @@ export default function EditProductPage({
     features: [] as string[],
     featureInput: "",
     shelfLife: "",
+    categorySlug: "sweets-snacks",
     imageUrl: "",
     isFeatured: false,
     isActive: true,
   });
 
   const [variants, setVariants] = useState<
-    Array<{ weight: string; price: number; mrp: number; stock: number; sku: string }>
+    Array<{ id?: string; weight: string; price: number; mrp: number; stock: number; sku: string }>
   >([]);
 
   useEffect(() => {
@@ -60,6 +68,7 @@ export default function EditProductPage({
           features: Array.isArray(p.features) ? p.features : [],
           featureInput: "",
           shelfLife: p.shelfLife || "",
+          categorySlug: p.category?.slug || "sweets-snacks",
           imageUrl: p.images?.[0]?.url || "",
           isFeatured: Boolean(p.isFeatured),
           isActive: Boolean(p.isActive),
@@ -68,6 +77,7 @@ export default function EditProductPage({
         if (p.variants && p.variants.length > 0) {
           setVariants(
             p.variants.map((v: any) => ({
+              id: v.id, // Preserved so existing variants update in place without foreign key errors
               weight: v.weight,
               price: Number(v.price),
               mrp: Number(v.mrp),
@@ -127,7 +137,7 @@ export default function EditProductPage({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.slug || !formData.description) {
-      setErrorMsg("Please fill in all required fields.");
+      setErrorMsg("Please fill in delicacy name, slug and description.");
       return;
     }
     setErrorMsg("");
@@ -146,6 +156,7 @@ export default function EditProductPage({
           ingredients: formData.ingredients,
           features: formData.features,
           shelfLife: formData.shelfLife,
+          categoryId: formData.categorySlug,
           imageUrl: formData.imageUrl,
           isFeatured: formData.isFeatured,
           isActive: formData.isActive,
@@ -153,18 +164,18 @@ export default function EditProductPage({
         }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || "Failed to update product");
+        throw new Error(data.message || "Failed to update product");
       }
 
       setSuccessMsg("Delicacy details and features updated successfully!");
       setTimeout(() => {
-        router.push("/admin/products");
-      }, 1000);
+        window.location.href = "/admin/products";
+      }, 800);
     } catch (err: any) {
       setErrorMsg(err.message || "Failed to update product.");
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -179,7 +190,7 @@ export default function EditProductPage({
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete product");
-      router.push("/admin/products");
+      window.location.href = "/admin/products";
     } catch (err: any) {
       alert(err.message || "Failed to delete product");
     }
@@ -189,7 +200,7 @@ export default function EditProductPage({
     return (
       <div className="py-20 text-center">
         <div className="h-10 w-10 animate-spin border-4 border-bihari-terracotta border-t-transparent rounded-full mx-auto mb-4" />
-        <p className="text-sm font-semibold text-neutral-600">Loading product details...</p>
+        <p className="text-sm font-semibold text-neutral-600">Loading delicacy details...</p>
       </div>
     );
   }
@@ -202,7 +213,7 @@ export default function EditProductPage({
             href="/admin/products"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-500 hover:text-bihari-terracotta mb-2"
           >
-            <ArrowLeft className="h-4 w-4" /> Back to Products
+            <ArrowLeft className="h-4 w-4" /> Back to Delicacies
           </Link>
           <h1 className="font-serif text-3xl font-extrabold text-bihari-dark">
             Edit Delicacy: {formData.name}
@@ -219,19 +230,19 @@ export default function EditProductPage({
           onClick={handleDelete}
           className="rounded-xl font-bold self-start sm:self-auto gap-1"
         >
-          <Trash2 className="h-4 w-4" /> Delete Product
+          <Trash2 className="h-4 w-4" /> Delete Delicacy
         </Button>
       </div>
 
       {errorMsg && (
-        <div className="rounded-xl bg-red-50 p-4 text-xs text-red-600 font-semibold flex items-center gap-2">
+        <div className="rounded-xl bg-red-50 border border-red-200/60 p-4 text-xs text-red-600 font-semibold flex items-center gap-2">
           <AlertCircle className="h-4 w-4 shrink-0" /> {errorMsg}
         </div>
       )}
 
       {successMsg && (
-        <div className="rounded-xl bg-emerald-50 p-4 text-xs text-emerald-700 font-bold flex items-center gap-2">
-          <Check className="h-4 w-4 shrink-0" /> {successMsg}
+        <div className="rounded-xl bg-emerald-50 border border-emerald-200/60 p-4 text-xs text-emerald-800 font-bold flex items-center gap-2">
+          <Check className="h-4 w-4 shrink-0 text-emerald-600" /> {successMsg}
         </div>
       )}
 
@@ -263,6 +274,31 @@ export default function EditProductPage({
               />
             </div>
 
+            <div className="space-y-1">
+              <Label htmlFor="category">Delicacy Category *</Label>
+              <select
+                id="category"
+                value={formData.categorySlug}
+                onChange={(e) => setFormData((p) => ({ ...p, categorySlug: e.target.value }))}
+                className="w-full text-xs font-semibold rounded-xl border border-amber-900/20 bg-white p-2.5 text-bihari-dark focus:outline-none focus:ring-2 focus:ring-bihari-terracotta"
+              >
+                {CATEGORIES.map((c) => (
+                  <option key={c.slug} value={c.slug}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-1">
+              <Label htmlFor="shelfLife">Shelf Life</Label>
+              <Input
+                id="shelfLife"
+                value={formData.shelfLife}
+                onChange={(e) => setFormData((p) => ({ ...p, shelfLife: e.target.value }))}
+              />
+            </div>
+
             <div className="sm:col-span-2 space-y-1">
               <Label htmlFor="tagline">Tagline / Cultural Hook</Label>
               <Input
@@ -283,7 +319,7 @@ export default function EditProductPage({
               />
             </div>
 
-            <div className="space-y-1">
+            <div className="sm:col-span-2 space-y-1">
               <Label htmlFor="ingredients">Pure Ingredients</Label>
               <Input
                 id="ingredients"
@@ -292,17 +328,8 @@ export default function EditProductPage({
               />
             </div>
 
-            <div className="space-y-1">
-              <Label htmlFor="shelfLife">Shelf Life</Label>
-              <Input
-                id="shelfLife"
-                value={formData.shelfLife}
-                onChange={(e) => setFormData((p) => ({ ...p, shelfLife: e.target.value }))}
-              />
-            </div>
-
             {/* Product Creative with Auto-Compression */}
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-2 pt-2">
               <ImageUploader
                 value={formData.imageUrl}
                 onChange={(url) => setFormData((p) => ({ ...p, imageUrl: url }))}
@@ -342,7 +369,7 @@ export default function EditProductPage({
               Product Features & Authenticity Badges
             </h3>
             <p className="text-xs text-neutral-500">
-              Displayed as bullet points on the product page (e.g., &quot;100% Pure Desi Ghee&quot;, &quot;Stone Ground&quot;, &quot;Zero Preservatives&quot;).
+              Displayed as bullet points on the product page (e.g. &quot;100% Pure Desi Ghee&quot;, &quot;Stone Ground&quot;, &quot;Zero Preservatives&quot;).
             </p>
           </div>
 
@@ -387,7 +414,7 @@ export default function EditProductPage({
               </span>
             ))}
             {formData.features.length === 0 && (
-              <p className="text-xs text-neutral-400 italic">No features added yet. Add some above!</p>
+              <p className="text-xs text-neutral-400 italic">No features added yet. Type above and click &quot;Add Feature&quot;.</p>
             )}
           </div>
         </div>
@@ -481,7 +508,7 @@ export default function EditProductPage({
             </Button>
           </Link>
           <Button type="submit" disabled={isSubmitting} className="font-bold px-8 shadow-md">
-            {isSubmitting ? "Saving..." : "Save Changes"}
+            {isSubmitting ? "Saving Changes..." : "Save Changes"}
           </Button>
         </div>
       </form>

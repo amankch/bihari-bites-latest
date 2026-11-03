@@ -14,7 +14,7 @@ export function Footer() {
             </div>
             <div>
               <h4 className="font-serif font-bold text-base">100% Shuddh & Desi</h4>
-              <p className="text-xs text-neutral-300">Pure Cow Ghee, Kachi Ghani Mustard Oil & Zero Preservatives</p>
+              <p className="text-xs text-neutral-300">Pure Cow Ghee, Roasted Makhana & Zero Preservatives</p>
             </div>
           </div>
           <div className="flex items-center gap-4 justify-center sm:justify-start">
@@ -42,7 +42,7 @@ export function Footer() {
           {/* Brand Col */}
           <div className="md:col-span-1 space-y-4">
             <h3 className="font-serif text-2xl font-bold tracking-tight text-white">
-              BIHARI BITES
+              BIHARI BITES:
             </h3>
             <p className="text-xs font-semibold uppercase tracking-widest text-amber-400">
               Swad Asli • Crunch Desi

@@ -84,7 +84,7 @@ export function AdminNav() {
           </div>
 
           <h2 className="font-serif text-xl font-bold tracking-tight text-white">
-            BIHARI BITES
+            BIHARI BITES:
           </h2>
           <p className="text-xs text-neutral-400 truncate">
             {session ? session.name : "Guarded Admin Console"}

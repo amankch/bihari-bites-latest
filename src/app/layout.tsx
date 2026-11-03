@@ -6,7 +6,7 @@ import { Footer } from "@/components/storefront/footer";
 import { WhatsAppCTA } from "@/components/storefront/whatsapp-cta";
 
 export const metadata: Metadata = {
-  title: "BIHARI BITES | Swad Asli Crunch Desi | Artisanal Bihari Delicacies",
+  title: "BIHARI BITES: Swad Asli • Crunch Desi | Artisanal Bihari Delicacies",
   description:
     "Order traditional authentic Bihari delicacies: Khasta Thekua made in pure Desi Ghee, Stone-ground Chana Sattu, Sun-cured Lal Mirch Bharua Aachar, and Bilona Danedar Ghee. Fast Pan-India delivery with seamless UPI payment.",
   keywords: [

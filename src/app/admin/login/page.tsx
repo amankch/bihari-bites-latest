@@ -1,15 +1,14 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { ShieldCheck, Lock, KeyRound, ArrowRight, AlertCircle, Sparkles, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Lock, KeyRound, ArrowRight, AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 function AdminLoginContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/admin";
   const errorParam = searchParams.get("error");
@@ -18,6 +17,7 @@ function AdminLoginContent() {
   const [masterKey, setMasterKey] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState(
     errorParam === "super_admin_required"
       ? "Master Super Admin role is required to access that section."
@@ -47,9 +47,9 @@ function AdminLoginContent() {
         throw new Error(data.message || "Failed to authenticate.");
       }
 
-      // Redirect to target admin route
-      router.push(callbackUrl);
-      router.refresh();
+      setIsSuccess(true);
+      // Force full document navigation to guarantee the browser sends the new cookie to server components & middleware
+      window.location.href = callbackUrl;
     } catch (err: any) {
       setErrorMsg(err.message || "Invalid credentials.");
       setIsLoading(false);
@@ -63,7 +63,7 @@ function AdminLoginContent() {
         <div className="text-center space-y-2">
           <Link href="/" className="inline-block group">
             <h2 className="font-serif text-3xl font-extrabold tracking-tight text-bihari-terracotta group-hover:text-bihari-haldi transition-colors">
-              BIHARI BITES
+              BIHARI BITES:
             </h2>
             <span className="text-[10px] font-bold uppercase tracking-widest text-bihari-mustard">
               Swad Asli • Crunch Desi
@@ -91,6 +91,7 @@ function AdminLoginContent() {
           <div className="grid grid-cols-2 p-1 rounded-xl bg-amber-50/80 border border-amber-900/10 text-xs font-bold">
             <button
               type="button"
+              disabled={isLoading || isSuccess}
               onClick={() => {
                 setMode("master");
                 setErrorMsg("");
@@ -105,6 +106,7 @@ function AdminLoginContent() {
             </button>
             <button
               type="button"
+              disabled={isLoading || isSuccess}
               onClick={() => {
                 setMode("staff");
                 setErrorMsg("");
@@ -126,6 +128,13 @@ function AdminLoginContent() {
             </div>
           )}
 
+          {isSuccess && (
+            <div className="rounded-xl bg-emerald-50 border border-emerald-200/60 p-3.5 text-xs text-emerald-800 font-bold flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>Authenticated! Opening Admin Dashboard...</span>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             {mode === "master" ? (
               <div className="space-y-1.5">
@@ -140,6 +149,7 @@ function AdminLoginContent() {
                   onChange={(e) => setMasterKey(e.target.value)}
                   className="rounded-xl border-amber-900/20 text-xs font-mono"
                   required
+                  disabled={isLoading || isSuccess}
                 />
                 <p className="text-[11px] text-neutral-400">
                   Configured in <code className="text-bihari-terracotta">ADMIN_MASTER_KEY</code>
@@ -158,6 +168,7 @@ function AdminLoginContent() {
                   onChange={(e) => setEmail(e.target.value)}
                   className="rounded-xl border-amber-900/20 text-xs"
                   required
+                  disabled={isLoading || isSuccess}
                 />
                 <p className="text-[11px] text-neutral-400">
                   Must be granted the <span className="font-semibold text-bihari-dark">ADMIN</span> or <span className="font-semibold text-bihari-dark">SUPER_ADMIN</span> role by Master Admin.
@@ -167,10 +178,22 @@ function AdminLoginContent() {
 
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || isSuccess}
               className="w-full rounded-xl font-bold bg-bihari-terracotta hover:bg-[#9a2b1c] text-white shadow-md gap-2"
             >
-              {isLoading ? "Authenticating..." : "Unlock Admin Dashboard"} <ArrowRight className="h-4 w-4" />
+              {isSuccess ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Redirecting...
+                </>
+              ) : isLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Authenticating...
+                </>
+              ) : (
+                <>
+                  Unlock Admin Dashboard <ArrowRight className="h-4 w-4" />
+                </>
+              )}
             </Button>
           </form>
 

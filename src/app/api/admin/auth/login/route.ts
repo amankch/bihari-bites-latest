@@ -7,31 +7,31 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { masterKey, email, password } = body;
+    const { masterKey, email } = body;
 
     const configuredMasterKey =
       process.env.ADMIN_MASTER_KEY || "BihariBites@SuperAdmin2026!";
 
     // 1. MASTER SUPER ADMIN KEY LOGIN
     if (masterKey && masterKey.trim() === configuredMasterKey.trim()) {
-      // Find or upsert Master Super Admin user record in database
-      const superAdminUser = await prisma.user.upsert({
-        where: { email: "superadmin@biharibites.com" },
-        update: {
-          role: "SUPER_ADMIN",
-        },
-        create: {
-          name: "Master Super Admin",
-          email: "superadmin@biharibites.com",
-          role: "SUPER_ADMIN",
-          phone: "+917281991952",
-        },
-      });
+      // Async non-blocking upsert to Neon DB so cold start never freezes login response
+      prisma.user
+        .upsert({
+          where: { email: "superadmin@biharibites.com" },
+          update: { role: "SUPER_ADMIN" },
+          create: {
+            name: "Master Super Admin",
+            email: "superadmin@biharibites.com",
+            role: "SUPER_ADMIN",
+            phone: "+917281991952",
+          },
+        })
+        .catch((err) => console.warn("Background user sync on login:", err?.message || err));
 
       const token = await createAdminToken({
-        userId: superAdminUser.id,
-        email: superAdminUser.email,
-        name: superAdminUser.name,
+        userId: "cmvzoimux0000cw2ws0s9hltx",
+        email: "superadmin@biharibites.com",
+        name: "Master Super Admin",
         role: "SUPER_ADMIN",
         isMaster: true,
       });
@@ -40,8 +40,8 @@ export async function POST(req: NextRequest) {
         success: true,
         message: "Welcome, Master Super Admin. Access granted.",
         user: {
-          name: superAdminUser.name,
-          email: superAdminUser.email,
+          name: "Master Super Admin",
+          email: "superadmin@biharibites.com",
           role: "SUPER_ADMIN",
         },
       });
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { message: "Invalid credentials. Please provide Master Key or Admin Email." },
+      { message: "Invalid credentials. Please provide valid Master Key or Admin Email." },
       { status: 400 }
     );
   } catch (error: any) {

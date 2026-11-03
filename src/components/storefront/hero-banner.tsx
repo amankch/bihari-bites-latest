@@ -19,13 +19,13 @@ export function HeroBanner() {
             </div>
 
             <h1 className="font-serif text-4xl sm:text-6xl font-extrabold tracking-tight text-bihari-dark leading-[1.15]">
-              BIHARI BITES <br />
+              BIHARI BITES: <br />
               <span className="text-bihari-terracotta">Swad Asli,</span>{" "}
               <span className="text-bihari-haldi">Crunch Desi</span>
             </h1>
 
             <p className="text-base sm:text-lg text-neutral-700 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
-              Experience the unmatched aroma of stone-ground <strong>Chana Sattu</strong>, melt-in-mouth <strong>Khasta Thekua</strong>, tangy sun-cured <strong>Lal Mirch Bharua Aachar</strong>, and aromatic <strong>Danedar Bilona Ghee</strong> — prepared using heirloom recipes.
+              Experience the unmatched aroma of stone-ground <strong>Chana Sattu</strong>, melt-in-mouth <strong>Khasta Thekua</strong>, tangy sun-cured <strong>Lal Mirch Bharua Aachar</strong>, and aromatic <strong>Danedar Bilona Desi Ghee</strong> — prepared using heirloom recipes.
             </p>
 
             {/* CTAs */}

@@ -42,7 +42,7 @@ export function Navbar() {
         {/* Brand Logo & Tagline */}
         <Link href="/" className="flex flex-col group">
           <span className="font-serif text-2xl sm:text-3xl font-extrabold tracking-tight text-bihari-terracotta group-hover:text-bihari-haldi transition-colors">
-            BIHARI BITES
+            BIHARI BITES:
           </span>
           <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-bihari-mustard">
             Swad Asli • Crunch Desi

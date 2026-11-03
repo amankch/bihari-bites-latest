@@ -50,8 +50,9 @@ export async function POST(
       },
     });
 
-    // Invalidate stats cache so dashboard metrics update immediately
+    // Invalidate stats and orders cache so dashboard metrics update immediately
     invalidateCache("admin:stats");
+    invalidateCache("admin:orders");
 
     return NextResponse.json({
       message: isApprove

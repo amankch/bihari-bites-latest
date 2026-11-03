@@ -96,58 +96,98 @@ export async function POST(req: NextRequest) {
       variants,
     } = body;
 
-    if (!name || !slug || !description || !categoryId || !variants?.length) {
+    if (!name || !slug || !description || !variants?.length) {
       return NextResponse.json(
-        { message: "Missing required fields" },
+        { message: "Please fill in all required product fields and at least one size pack." },
         { status: 400 }
       );
     }
 
+    // Resolve Category ID from slug or ID safely
+    let validCategoryId: string | undefined = undefined;
+    if (categoryId) {
+      const foundCategory = await prisma.category.findFirst({
+        where: {
+          OR: [{ id: categoryId }, { slug: categoryId }],
+        },
+      });
+      if (foundCategory) {
+        validCategoryId = foundCategory.id;
+      }
+    }
+
+    // If still not resolved, assign first category in database
+    if (!validCategoryId) {
+      const firstCategory = await prisma.category.findFirst();
+      validCategoryId = firstCategory?.id;
+    }
+
+    if (!validCategoryId) {
+      return NextResponse.json(
+        { message: "No category available. Please seed categories first." },
+        { status: 400 }
+      );
+    }
+
+    // Clean features array
+    const cleanFeatures: string[] = Array.isArray(features)
+      ? features.map((f: string) => f.trim()).filter(Boolean)
+      : typeof features === "string"
+      ? features.split(",").map((s) => s.trim()).filter(Boolean)
+      : [];
+
+    // Ensure clean unique slug
+    const cleanSlug = slug.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
+
     const product = await prisma.product.create({
       data: {
         name,
-        slug,
-        tagline,
+        slug: cleanSlug,
+        tagline: tagline || null,
         description,
-        ingredients,
-        features: Array.isArray(features) ? features : [],
-        shelfLife,
+        ingredients: ingredients || null,
+        features: cleanFeatures,
+        shelfLife: shelfLife || "90 Days",
         isFeatured: Boolean(isFeatured),
-        categoryId,
+        categoryId: validCategoryId,
         images: {
           create: [
             {
               url:
                 imageUrl ||
-                "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop",
+                "/images/products/thekua.jpg",
               isPrimary: true,
             },
           ],
         },
         variants: {
-          create: variants.map((v: any) => ({
-            weight: v.weight,
-            price: v.price,
-            mrp: v.mrp,
-            stock: v.stock || 50,
-            sku: v.sku || `${slug}-${v.weight.toLowerCase()}`,
+          create: variants.map((v: any, idx: number) => ({
+            weight: v.weight || "Standard",
+            price: Number(v.price),
+            mrp: Number(v.mrp) || Number(v.price),
+            stock: Number(v.stock) || 50,
+            sku:
+              v.sku ||
+              `${cleanSlug}-${(v.weight || "std").toLowerCase().replace(/[^a-z0-9]/g, "")}-${Date.now()}-${idx}`,
           })),
         },
       },
       include: {
         variants: true,
         images: true,
+        category: true,
       },
     });
 
     // Invalidate product caches immediately
     invalidateCache("products");
+    invalidateCache("product:slug");
 
     return NextResponse.json({ product }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating product:", error);
     return NextResponse.json(
-      { message: "Failed to create product" },
+      { message: error?.message || "Failed to create product" },
       { status: 500 }
     );
   }

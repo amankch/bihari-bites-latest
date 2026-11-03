@@ -22,7 +22,7 @@ export async function GET(
 
     if (!product) {
       return NextResponse.json(
-        { message: "Product not found" },
+        { message: "Delicacy not found" },
         { status: 404 }
       );
     }
@@ -62,7 +62,7 @@ export async function PUT(
 
     if (!name || !slug || !description) {
       return NextResponse.json(
-        { message: "Product name, slug and description are required" },
+        { message: "Product name, slug and description are required." },
         { status: 400 }
       );
     }
@@ -77,10 +77,25 @@ export async function PUT(
           .filter(Boolean)
       : [];
 
+    // Resolve Category ID from slug or ID safely if provided
+    let validCategoryId: string | undefined = undefined;
+    if (categoryId) {
+      const foundCategory = await prisma.category.findFirst({
+        where: {
+          OR: [{ id: categoryId }, { slug: categoryId }],
+        },
+      });
+      if (foundCategory) {
+        validCategoryId = foundCategory.id;
+      }
+    }
+
+    const cleanSlug = slug.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-");
+
     // Update Product Details
     const updateData: any = {
       name,
-      slug,
+      slug: cleanSlug,
       tagline: tagline || null,
       description,
       ingredients: ingredients || null,
@@ -90,42 +105,72 @@ export async function PUT(
       isActive: isActive !== undefined ? Boolean(isActive) : true,
     };
 
-    if (categoryId) {
-      updateData.categoryId = categoryId;
+    if (validCategoryId) {
+      updateData.categoryId = validCategoryId;
     }
 
     // Update primary image if provided
     if (imageUrl) {
-      await prisma.productImage.deleteMany({
-        where: { productId: id },
+      const existingImage = await prisma.productImage.findFirst({
+        where: { productId: id, isPrimary: true },
       });
-      await prisma.productImage.create({
-        data: {
-          productId: id,
-          url: imageUrl,
-          alt: name,
-          isPrimary: true,
-        },
-      });
+
+      if (existingImage) {
+        await prisma.productImage.update({
+          where: { id: existingImage.id },
+          data: { url: imageUrl, alt: name },
+        });
+      } else {
+        await prisma.productImage.create({
+          data: {
+            productId: id,
+            url: imageUrl,
+            alt: name,
+            isPrimary: true,
+          },
+        });
+      }
     }
 
-    // Update or recreate variants if provided
+    // Update or upsert variants safely WITHOUT deleteMany (preserves order_item foreign keys!)
     if (variants && Array.isArray(variants) && variants.length > 0) {
-      // Delete existing variants and re-create to keep sync clean
-      await prisma.productVariant.deleteMany({
-        where: { productId: id },
-      });
+      for (const [idx, v] of variants.entries()) {
+        const vWeight = v.weight || "Standard";
+        const vPrice = Number(v.price);
+        const vMrp = Number(v.mrp) || vPrice;
+        const vStock = Number(v.stock) || 50;
+        const vSku = v.sku || `${cleanSlug}-${vWeight.toLowerCase().replace(/[^a-z0-9]/g, "")}-${idx}`;
 
-      await prisma.productVariant.createMany({
-        data: variants.map((v: any) => ({
-          productId: id,
-          weight: v.weight,
-          price: v.price,
-          mrp: v.mrp || v.price,
-          stock: v.stock || 50,
-          sku: v.sku || `${slug}-${v.weight.toLowerCase().replace(/[^a-z0-9]/g, "")}`,
-        })),
-      });
+        if (v.id) {
+          // Update existing variant in place
+          await prisma.productVariant
+            .update({
+              where: { id: v.id },
+              data: {
+                weight: vWeight,
+                price: vPrice,
+                mrp: vMrp,
+                stock: vStock,
+                sku: vSku,
+              },
+            })
+            .catch((err) => console.warn("Variant update warning:", err?.message || err));
+        } else {
+          // Brand new variant added in editor
+          await prisma.productVariant
+            .create({
+              data: {
+                productId: id,
+                weight: vWeight,
+                price: vPrice,
+                mrp: vMrp,
+                stock: vStock,
+                sku: `${vSku}-${Date.now()}`,
+              },
+            })
+            .catch((err) => console.warn("Variant create warning:", err?.message || err));
+        }
+      }
     }
 
     const updatedProduct = await prisma.product.update({
@@ -143,13 +188,13 @@ export async function PUT(
     invalidateCache("product:slug");
 
     return NextResponse.json({
-      message: "Product and features updated successfully",
+      message: "Delicacy details and features updated successfully!",
       product: updatedProduct,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating product:", error);
     return NextResponse.json(
-      { message: "Failed to update product" },
+      { message: error?.message || "Failed to update product" },
       { status: 500 }
     );
   }

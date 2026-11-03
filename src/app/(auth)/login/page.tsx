@@ -87,7 +87,7 @@ export default function LoginPage() {
 
           <div className="text-center space-y-1">
             <h1 className="font-serif text-2xl sm:text-3xl font-extrabold text-bihari-dark">
-              Welcome to BIHARI BITES
+              Welcome to BIHARI BITES:
             </h1>
             <p className="text-xs text-neutral-500 uppercase tracking-widest font-bold text-bihari-mustard">
               Swad Asli • Crunch Desi
