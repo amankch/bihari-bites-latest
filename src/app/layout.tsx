@@ -5,10 +5,27 @@ import { Navbar } from "@/components/storefront/navbar";
 import { Footer } from "@/components/storefront/footer";
 import { WhatsAppCTA } from "@/components/storefront/whatsapp-cta";
 
+function getSiteUrl(): string {
+  const envUrl = process.env.NEXT_PUBLIC_APP_URL;
+  // If explicitly defined and NOT localhost, use it
+  if (envUrl && !envUrl.includes("localhost") && !envUrl.includes("127.0.0.1")) {
+    return envUrl.startsWith("http") ? envUrl.replace(/\/$/, "") : `https://${envUrl.replace(/\/$/, "")}`;
+  }
+  // Vercel production system variables
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.replace(/\/$/, "")}`;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL.replace(/\/$/, "")}`;
+  }
+  // Default canonical production URL
+  return "https://bihari-bites-latest.vercel.app";
+}
+
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || "https://biharibites.com"
-  ),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "BIHARI BITES: Swad Asli • Crunch Desi | Artisanal Bihari Delicacies",
     template: "%s | BIHARI BITES: Swad Asli • Crunch Desi",
@@ -43,14 +60,16 @@ export const metadata: Metadata = {
     title: "BIHARI BITES: Swad Asli • Crunch Desi",
     description:
       "Handcrafted authentic Bihari delicacies: Khasta Thekua in pure Desi Ghee, Stone-ground Sattu, and Sun-cured Bharua Aachar. Direct from Patna to your doorstep.",
-    url: "https://biharibites.com",
+    url: siteUrl,
     siteName: "BIHARI BITES: Swad Asli • Crunch Desi",
     images: [
       {
-        url: "/og-image.jpg",
+        url: `${siteUrl}/og-image.jpg`,
+        secureUrl: `${siteUrl}/og-image.jpg`,
         width: 1200,
         height: 630,
         alt: "BIHARI BITES: Swad Asli • Crunch Desi",
+        type: "image/jpeg",
       },
     ],
     locale: "en_IN",
@@ -61,7 +80,7 @@ export const metadata: Metadata = {
     title: "BIHARI BITES: Swad Asli • Crunch Desi",
     description:
       "Handcrafted authentic Bihari delicacies: Khasta Thekua in pure Desi Ghee, Stone-ground Sattu, and Sun-cured Bharua Aachar. Direct from Patna to your doorstep.",
-    images: ["/og-image.jpg"],
+    images: [`${siteUrl}/og-image.jpg`],
   },
 };
 

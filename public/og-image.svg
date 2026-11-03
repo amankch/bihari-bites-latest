@@ -1,16 +1,16 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="ogBg" cx="30%" cy="30%" r="80%">
+    <radialGradient id="ogBg" cx="50%" cy="40%" r="70%">
       <stop offset="0%" stop-color="#451A03" />
-      <stop offset="50%" stop-color="#2A1810" />
-      <stop offset="100%" stop-color="#1C0F0A" />
+      <stop offset="60%" stop-color="#2A1810" />
+      <stop offset="100%" stop-color="#180C07" />
     </radialGradient>
     <linearGradient id="ogGold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FCD34D" />
+      <stop offset="0%" stop-color="#FDE68A" />
       <stop offset="50%" stop-color="#F59E0B" />
       <stop offset="100%" stop-color="#D97706" />
     </linearGradient>
-    <linearGradient id="ogTerracotta" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="ogTerra" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#EF4444" />
       <stop offset="50%" stop-color="#DC2626" />
       <stop offset="100%" stop-color="#991B1B" />
@@ -20,76 +20,85 @@
   <!-- Deep Warm Mahogany Background -->
   <rect width="1200" height="630" fill="url(#ogBg)"/>
 
-  <!-- Ornate Golden Borders (Madhubani / Indian Heritage Style) -->
-  <rect x="28" y="28" width="1144" height="574" rx="16" fill="none" stroke="url(#ogGold)" stroke-width="2" opacity="0.6"/>
-  <rect x="38" y="38" width="1124" height="554" rx="12" fill="none" stroke="#F59E0B" stroke-width="1" stroke-dasharray="8 8" opacity="0.4"/>
+  <!-- Ornate Golden Borders (Indian Heritage Style) -->
+  <rect x="24" y="24" width="1152" height="582" rx="16" fill="none" stroke="url(#ogGold)" stroke-width="2" opacity="0.65"/>
+  <rect x="34" y="34" width="1132" height="562" rx="12" fill="none" stroke="#F59E0B" stroke-width="1" stroke-dasharray="8 8" opacity="0.35"/>
 
   <!-- Corner Ornaments -->
   <g fill="#F59E0B" opacity="0.8">
-    <circle cx="48" cy="48" r="5" />
-    <circle cx="1152" cy="48" r="5" />
-    <circle cx="48" cy="582" r="5" />
-    <circle cx="1152" cy="582" r="5" />
+    <circle cx="44" cy="44" r="5" />
+    <circle cx="1156" cy="44" r="5" />
+    <circle cx="44" cy="586" r="5" />
+    <circle cx="1156" cy="586" r="5" />
   </g>
 
-  <!-- Top Pill / Trust Tag -->
-  <g transform="translate(80, 75)">
-    <rect width="420" height="36" rx="18" fill="#F59E0B" fill-opacity="0.15" stroke="#F59E0B" stroke-width="1.5"/>
-    <text x="210" y="23" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#FDE68A" text-anchor="middle" letter-spacing="2">
-      AUTHENTIC BIHAR PANTRY • 100% DESI GHEE
+  <!-- Top Trust Pill -->
+  <g transform="translate(390, 52)">
+    <rect width="420" height="34" rx="17" fill="#F59E0B" fill-opacity="0.18" stroke="#F59E0B" stroke-width="1.5"/>
+    <text x="210" y="22" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="800" fill="#FDE68A" text-anchor="middle" letter-spacing="2.5">
+      AUTHENTIC BIHAR PANTRY • 100% SHUDDH DESI
     </text>
   </g>
 
-  <!-- Main Headline -->
-  <text x="80" y="190" font-family="'Playfair Display', Georgia, serif" font-size="76" font-weight="900" fill="#FFFDF7" letter-spacing="-1">
+  <!-- Center Emblem Seal (Scaled at center x=600, y=105) -->
+  <g transform="translate(545, 105) scale(0.215)">
+    <circle cx="256" cy="256" r="240" fill="#FFFDF7" stroke="#991B1B" stroke-width="14"/>
+    <circle cx="256" cy="256" r="222" fill="none" stroke="#D97706" stroke-width="4" stroke-dasharray="6 8"/>
+    <circle cx="256" cy="256" r="208" fill="none" stroke="#991B1B" stroke-width="2"/>
+    <path d="M196 360 C196 372, 316 372, 316 360 L300 348 L212 348 Z" fill="#D97706" />
+    <path d="M176 270 C160 330, 210 350, 256 350 C302 350, 352 330, 336 270 C330 240, 300 230, 280 220 L232 220 C212 230, 182 240, 176 270 Z" fill="#991B1B" />
+    <ellipse cx="256" cy="204" rx="40" ry="10" fill="#F59E0B" stroke="#991B1B" stroke-width="3"/>
+    <path d="M256 120 C240 155, 230 178, 230 196 C230 210, 242 220, 256 220 C270 220, 282 210, 282 196 C282 178, 272 155, 256 120 Z" fill="#F59E0B" />
+    <path d="M256 142 C248 165, 242 180, 242 192 C242 200, 248 208, 256 208 C264 208, 270 200, 270 192 C270 180, 264 165, 256 142 Z" fill="#FDE68A" />
+  </g>
+
+  <!-- Main Headline (Centered) -->
+  <text x="600" y="275" font-family="'Playfair Display', Georgia, serif" font-size="64" font-weight="900" fill="#FFFDF7" text-anchor="middle" letter-spacing="-0.5">
     BIHARI BITES:
   </text>
-  <text x="80" y="248" font-family="'Cinzel', Georgia, serif" font-size="34" font-weight="800" fill="url(#ogGold)" letter-spacing="5">
+  <text x="600" y="322" font-family="'Cinzel', Georgia, serif" font-size="28" font-weight="800" fill="url(#ogGold)" text-anchor="middle" letter-spacing="5">
     SWAD ASLI • CRUNCH DESI
   </text>
 
-  <!-- Subheadline -->
-  <text x="80" y="305" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="400" fill="#D1D5DB">
+  <!-- Tagline / Subtitle (Centered) -->
+  <text x="600" y="365" font-family="system-ui, -apple-system, sans-serif" font-size="19" font-weight="500" fill="#E5E7EB" text-anchor="middle">
     Handcrafted Khasta Thekua, Stone-Ground Sattu &amp; Sun-Cured Bharua Aachar
   </text>
-  <text x="80" y="335" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="400" fill="#9CA3AF">
-    Prepared fresh in Patna using timeless heirloom recipes. Fast Pan-India delivery.
+  <text x="600" y="395" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="400" fill="#9CA3AF" text-anchor="middle">
+    Made fresh in Patna using heirloom recipes • Pure Cow Desi Ghee • Fast Pan-India Delivery
   </text>
 
-  <!-- 4 Feature Badges Grid -->
-  <g transform="translate(80, 380)">
+  <!-- 4 Delicacy Badges Row (Centered) -->
+  <g transform="translate(85, 435)">
     <!-- Badge 1: Thekua -->
-    <rect x="0" y="0" width="240" height="88" rx="14" fill="#3A1C14" stroke="#78350F" stroke-width="1.5"/>
-    <text x="20" y="36" font-family="system-ui" font-size="24">🥮</text>
-    <text x="56" y="36" font-family="'Playfair Display', Georgia, serif" font-size="17" font-weight="800" fill="#FFFDF7">Khasta Thekua</text>
-    <text x="20" y="66" font-family="system-ui" font-size="13" font-weight="600" fill="#FCD34D">Shuddh Cow Desi Ghee</text>
+    <rect x="0" y="0" width="240" height="76" rx="14" fill="#3A1C14" stroke="#78350F" stroke-width="1.5"/>
+    <text x="18" y="34" font-family="system-ui" font-size="22">🥮</text>
+    <text x="50" y="32" font-family="'Playfair Display', Georgia, serif" font-size="16" font-weight="800" fill="#FFFDF7">Khasta Thekua</text>
+    <text x="50" y="56" font-family="system-ui" font-size="12" font-weight="600" fill="#FCD34D">Shuddh Cow Desi Ghee</text>
 
     <!-- Badge 2: Sattu -->
-    <rect x="260" y="0" width="240" height="88" rx="14" fill="#3A1C14" stroke="#78350F" stroke-width="1.5"/>
-    <text x="280" y="36" font-family="system-ui" font-size="24">🌾</text>
-    <text x="316" y="36" font-family="'Playfair Display', Georgia, serif" font-size="17" font-weight="800" fill="#FFFDF7">Chana Sattu</text>
-    <text x="280" y="66" font-family="system-ui" font-size="13" font-weight="600" fill="#FCD34D">Stone-Ground Roasted</text>
+    <rect x="265" y="0" width="240" height="76" rx="14" fill="#3A1C14" stroke="#78350F" stroke-width="1.5"/>
+    <text x="283" y="34" font-family="system-ui" font-size="22">🌾</text>
+    <text x="315" y="32" font-family="'Playfair Display', Georgia, serif" font-size="16" font-weight="800" fill="#FFFDF7">Chana Sattu</text>
+    <text x="315" y="56" font-family="system-ui" font-size="12" font-weight="600" fill="#FCD34D">Stone-Ground Roasted</text>
 
     <!-- Badge 3: Aachar -->
-    <rect x="520" y="0" width="240" height="88" rx="14" fill="#3A1C14" stroke="#78350F" stroke-width="1.5"/>
-    <text x="540" y="36" font-family="system-ui" font-size="24">🌶️</text>
-    <text x="576" y="36" font-family="'Playfair Display', Georgia, serif" font-size="17" font-weight="800" fill="#FFFDF7">Bharua Aachar</text>
-    <text x="540" y="66" font-family="system-ui" font-size="13" font-weight="600" fill="#FCD34D">Sun-Cured Lal Mirch</text>
+    <rect x="530" y="0" width="240" height="76" rx="14" fill="#3A1C14" stroke="#78350F" stroke-width="1.5"/>
+    <text x="548" y="34" font-family="system-ui" font-size="22">🌶️</text>
+    <text x="580" y="32" font-family="'Playfair Display', Georgia, serif" font-size="16" font-weight="800" fill="#FFFDF7">Bharua Aachar</text>
+    <text x="580" y="56" font-family="system-ui" font-size="12" font-weight="600" fill="#FCD34D">Sun-Cured Lal Mirch</text>
 
     <!-- Badge 4: Ghee -->
-    <rect x="780" y="0" width="240" height="88" rx="14" fill="#3A1C14" stroke="#78350F" stroke-width="1.5"/>
-    <text x="800" y="36" font-family="system-ui" font-size="24">🧈</text>
-    <text x="836" y="36" font-family="'Playfair Display', Georgia, serif" font-size="17" font-weight="800" fill="#FFFDF7">Bilona Cow Ghee</text>
-    <text x="800" y="66" font-family="system-ui" font-size="13" font-weight="600" fill="#FCD34D">Danedar Aromatic</text>
+    <rect x="795" y="0" width="235" height="76" rx="14" fill="#3A1C14" stroke="#78350F" stroke-width="1.5"/>
+    <text x="813" y="34" font-family="system-ui" font-size="22">🧈</text>
+    <text x="845" y="32" font-family="'Playfair Display', Georgia, serif" font-size="16" font-weight="800" fill="#FFFDF7">Bilona Cow Ghee</text>
+    <text x="845" y="56" font-family="system-ui" font-size="12" font-weight="600" fill="#FCD34D">Danedar Aromatic</text>
   </g>
 
-  <!-- Bottom Bar: URL & Helpline -->
-  <g transform="translate(80, 520)">
-    <text x="0" y="24" font-family="'Cinzel', Georgia, serif" font-size="20" font-weight="900" fill="url(#ogGold)" letter-spacing="3">
-      BIHARIBITES.COM
-    </text>
-    <text x="750" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#FDE68A">
-      📞 Orders &amp; Helpline: +91 7281991952
+  <!-- Bottom Bar: URL & Helpline (Centered) -->
+  <g transform="translate(0, 560)">
+    <text x="600" y="0" font-family="'Cinzel', Georgia, serif" font-size="18" font-weight="900" fill="url(#ogGold)" text-anchor="middle" letter-spacing="3">
+      BIHARIBITES.COM • PAN-INDIA DELIVERY • WHATSAPP: +91 7281991952
     </text>
   </g>
 </svg>
