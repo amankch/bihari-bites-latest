@@ -85,7 +85,14 @@ export default function LoginPage() {
             <ArrowLeft className="h-3.5 w-3.5" /> Back to Store
           </Link>
 
-          <div className="text-center space-y-1">
+          <div className="text-center space-y-2">
+            <div className="mx-auto h-16 w-16 rounded-full bg-[#FFFDF7] p-1 border border-amber-900/10 shadow-sm flex items-center justify-center">
+              <img
+                src="/images/logo-emblem.svg"
+                alt="Bihari Bites Logo"
+                className="h-full w-full object-contain"
+              />
+            </div>
             <h1 className="font-serif text-2xl sm:text-3xl font-extrabold text-bihari-dark">
               Welcome to BIHARI BITES:
             </h1>

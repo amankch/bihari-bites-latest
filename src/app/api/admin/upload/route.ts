@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import fs from "fs/promises";
 import sharp from "sharp";
+import prisma from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -38,19 +39,15 @@ export async function POST(req: NextRequest) {
     const originalBytes = inputBuffer.length;
 
     // Generate safe clean slugified filename
-    const baseName = file.name
-      .replace(/\.[^/.]+$/, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .slice(0, 40) || "delicacy";
+    const baseName =
+      file.name
+        .replace(/\.[^/.]+$/, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .slice(0, 40) || "delicacy";
 
     const timestamp = Date.now();
     const outputFileName = `${baseName}-${timestamp}.webp`;
-    const uploadsDir = path.join(process.cwd(), "public", "uploads", "products");
-
-    await fs.mkdir(uploadsDir, { recursive: true });
-
-    const outputPath = path.join(uploadsDir, outputFileName);
 
     // Auto-compress, resize to 1000x1000 square, convert to WebP, strip heavy EXIF
     const compressedBuffer = await sharp(inputBuffer)
@@ -66,9 +63,36 @@ export async function POST(req: NextRequest) {
       })
       .toBuffer();
 
-    await fs.writeFile(outputPath, compressedBuffer);
-
     const compressedBytes = compressedBuffer.length;
+    const dataUint8 = new Uint8Array(compressedBuffer);
+
+    // 1. Persist directly to Neon PostgreSQL database (durable across all serverless deployments)
+    await prisma.mediaUpload.upsert({
+      where: { filename: outputFileName },
+      update: {
+        data: dataUint8,
+        size: compressedBytes,
+        mimeType: "image/webp",
+      },
+      create: {
+        filename: outputFileName,
+        data: dataUint8,
+        size: compressedBytes,
+        mimeType: "image/webp",
+      },
+    });
+
+    // 2. Best-effort write to local disk (for dev instance / local caching)
+    try {
+      const uploadsDir = path.join(process.cwd(), "public", "uploads", "products");
+      await fs.mkdir(uploadsDir, { recursive: true });
+      const outputPath = path.join(uploadsDir, outputFileName);
+      await fs.writeFile(outputPath, compressedBuffer);
+    } catch {
+      // Serverless environments like AWS Lambda / Vercel have a read-only filesystem (/var/task)
+      // The image is already safely persisted in PostgreSQL, so disk write errors are safely ignored.
+    }
+
     const savingsPercent = Math.max(
       0,
       Math.round(((originalBytes - compressedBytes) / originalBytes) * 100)
@@ -81,7 +105,7 @@ export async function POST(req: NextRequest) {
     };
 
     return NextResponse.json({
-      url: `/uploads/products/${outputFileName}`,
+      url: `/api/uploads/${outputFileName}`,
       filename: outputFileName,
       originalSize: formatBytes(originalBytes),
       compressedSize: formatBytes(compressedBytes),

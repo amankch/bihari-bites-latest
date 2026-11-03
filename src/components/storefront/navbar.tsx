@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { ShoppingBag, PhoneCall, ShieldCheck, User, Menu, X, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -40,13 +41,25 @@ export function Navbar() {
 
       <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6">
         {/* Brand Logo & Tagline */}
-        <Link href="/" className="flex flex-col group">
-          <span className="font-serif text-2xl sm:text-3xl font-extrabold tracking-tight text-bihari-terracotta group-hover:text-bihari-haldi transition-colors">
-            BIHARI BITES:
-          </span>
-          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-bihari-mustard">
-            Swad Asli • Crunch Desi
-          </span>
+        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
+          <div className="relative h-11 w-11 sm:h-12 sm:w-12 shrink-0 rounded-full bg-[#FFFDF7] p-0.5 border border-amber-900/10 shadow-sm group-hover:scale-105 transition-transform">
+            <Image
+              src="/images/logo-emblem.svg"
+              alt="Bihari Bites Logo"
+              width={48}
+              height={48}
+              className="h-full w-full object-contain"
+              priority
+            />
+          </div>
+          <div className="flex flex-col justify-center">
+            <span className="font-serif text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-bihari-terracotta group-hover:text-bihari-haldi transition-colors leading-none">
+              BIHARI BITES:
+            </span>
+            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-widest text-bihari-mustard mt-1 leading-none">
+              Swad Asli • Crunch Desi
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}

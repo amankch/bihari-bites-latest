@@ -1,0 +1,73 @@
+<svg width="640" height="160" viewBox="0 0 640 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="logoBgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFDF7" />
+      <stop offset="90%" stop-color="#FEF3C7" />
+      <stop offset="100%" stop-color="#FDE68A" />
+    </radialGradient>
+    <linearGradient id="logoTerraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9B381E" />
+      <stop offset="100%" stop-color="#7C2D12" />
+    </linearGradient>
+    <linearGradient id="logoGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="50%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#B45309" />
+    </linearGradient>
+  </defs>
+
+  <!-- Left: Emblem Seal (scaled into 140x140 at x=10, y=10) -->
+  <g transform="translate(10, 10) scale(0.2734)">
+    <!-- Outer Ring -->
+    <circle cx="256" cy="256" r="240" fill="url(#logoBgGrad)" stroke="#9B381E" stroke-width="14"/>
+    <circle cx="256" cy="256" r="222" fill="none" stroke="#D97706" stroke-width="4" stroke-dasharray="6 8"/>
+    <circle cx="256" cy="256" r="208" fill="none" stroke="#9B381E" stroke-width="2"/>
+
+    <!-- Handi / Kalash -->
+    <path d="M196 360 C196 372, 316 372, 316 360 L300 348 L212 348 Z" fill="url(#logoGoldGrad)" />
+    <path d="M176 270 C160 330, 210 350, 256 350 C302 350, 352 330, 336 270 C330 240, 300 230, 280 220 L232 220 C212 230, 182 240, 176 270 Z" fill="url(#logoTerraGrad)" />
+    <path d="M220 220 L292 220 L288 206 L224 206 Z" fill="url(#logoGoldGrad)" stroke="#7C2D12" stroke-width="2"/>
+    <ellipse cx="256" cy="204" rx="40" ry="10" fill="#F59E0B" stroke="#9B381E" stroke-width="3"/>
+
+    <!-- Flame / Wheat -->
+    <path d="M256 120 C240 155, 230 178, 230 196 C230 210, 242 220, 256 220 C270 220, 282 210, 282 196 C282 178, 272 155, 256 120 Z" fill="url(#logoGoldGrad)" />
+    <path d="M256 142 C248 165, 242 180, 242 192 C242 200, 248 208, 256 208 C264 208, 270 200, 270 192 C270 180, 264 165, 256 142 Z" fill="#FDE68A" />
+
+    <!-- Grains -->
+    <g fill="url(#logoGoldGrad)" stroke="#9B381E" stroke-width="2">
+      <path d="M165 240 C145 220, 135 190, 150 175 C165 190, 165 220, 165 240 Z" />
+      <path d="M185 200 C170 175, 165 150, 185 140 C195 160, 190 185, 185 200 Z" />
+      <path d="M347 240 C367 220, 377 190, 362 175 C347 190, 347 220, 347 240 Z" />
+      <path d="M327 200 C342 175, 347 150, 327 140 C317 160, 322 185, 327 200 Z" />
+    </g>
+    <!-- Bands -->
+    <path d="M188 280 Q256 305 324 280" fill="none" stroke="#FEF3C7" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="256" cy="296" r="6" fill="#FEF3C7"/>
+  </g>
+
+  <!-- Right: Typography -->
+  <g transform="translate(165, 0)">
+    <!-- Brand Name with Colon -->
+    <text x="0" y="78" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="46" font-weight="900" fill="#9B381E" letter-spacing="-0.5">
+      BIHARI BITES:
+    </text>
+
+    <!-- Tagline: SWAD ASLI • CRUNCH DESI -->
+    <text x="3" y="112" font-family="'Cinzel', 'Trajan Pro', Georgia, serif" font-size="16" font-weight="800" fill="#B45309" letter-spacing="4">
+      SWAD ASLI • CRUNCH DESI
+    </text>
+
+    <!-- Heritage Flourish Divider -->
+    <g stroke="#D97706" stroke-width="1.5" opacity="0.85">
+      <line x1="3" y1="126" x2="160" y2="126" />
+      <circle cx="166" cy="126" r="2.5" fill="#9B381E" />
+      <polygon points="174,123 180,126 174,129" fill="#D97706"/>
+      <circle cx="188" cy="126" r="2.5" fill="#9B381E" />
+      <line x1="194" y1="126" x2="350" y2="126" />
+    </g>
+
+    <text x="3" y="145" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#78350F" letter-spacing="1.5">
+      ARTISANAL DELICACIES • HANDCRAFTED IN BIHAR
+    </text>
+  </g>
+</svg>

@@ -41,12 +41,23 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 py-12">
           {/* Brand Col */}
           <div className="md:col-span-1 space-y-4">
-            <h3 className="font-serif text-2xl font-bold tracking-tight text-white">
-              BIHARI BITES:
-            </h3>
-            <p className="text-xs font-semibold uppercase tracking-widest text-amber-400">
-              Swad Asli • Crunch Desi
-            </p>
+            <div className="flex items-center gap-3">
+              <div className="h-12 w-12 rounded-full bg-white/10 p-0.5 border border-amber-400/30 shrink-0">
+                <img
+                  src="/images/logo-emblem.svg"
+                  alt="Bihari Bites Logo"
+                  className="h-full w-full object-contain"
+                />
+              </div>
+              <div>
+                <h3 className="font-serif text-2xl font-bold tracking-tight text-white leading-none">
+                  BIHARI BITES:
+                </h3>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-amber-400 mt-1">
+                  Swad Asli • Crunch Desi
+                </p>
+              </div>
+            </div>
             <p className="text-sm text-neutral-300 leading-relaxed">
               Carrying forward the timeless gastronomic heritage of Bihar. Every bite of our Khasta Thekua and spoon of Stone-Ground Sattu takes you back to grandma’s earthen courtyard.
             </p>

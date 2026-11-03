@@ -145,6 +145,18 @@ model ProductImage {
   @@map("product_image")
 }
 
+model MediaUpload {
+  id        String   @id @default(cuid())
+  filename  String   @unique
+  mimeType  String   @default("image/webp")
+  data      Bytes
+  size      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("media_upload")
+}
+
 // ==========================================
 // Orders, Checkout & Delivery
 // ==========================================

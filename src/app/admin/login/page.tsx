@@ -61,7 +61,14 @@ function AdminLoginContent() {
       <div className="w-full max-w-md space-y-6">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <Link href="/" className="inline-block group">
+          <Link href="/" className="inline-flex flex-col items-center group">
+            <div className="h-16 w-16 rounded-full bg-[#FFFDF7] p-1 border border-amber-900/10 shadow-sm mb-2 group-hover:scale-105 transition-transform">
+              <img
+                src="/images/logo-emblem.svg"
+                alt="Bihari Bites Logo"
+                className="h-full w-full object-contain"
+              />
+            </div>
             <h2 className="font-serif text-3xl font-extrabold tracking-tight text-bihari-terracotta group-hover:text-bihari-haldi transition-colors">
               BIHARI BITES:
             </h2>

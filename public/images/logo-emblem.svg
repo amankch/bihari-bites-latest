@@ -1,0 +1,75 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFDF7" />
+      <stop offset="85%" stop-color="#FEF3C7" />
+      <stop offset="100%" stop-color="#FDE68A" />
+    </radialGradient>
+    <linearGradient id="terracottaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B91C1C" />
+      <stop offset="50%" stop-color="#991B1B" />
+      <stop offset="100%" stop-color="#7F1D1D" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="50%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#B45309" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#7F1D1D" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Ring with Traditional Dots -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGrad)" stroke="#991B1B" stroke-width="12" filter="url(#shadow)"/>
+  <circle cx="256" cy="256" r="222" fill="none" stroke="#D97706" stroke-width="3" stroke-dasharray="6 8"/>
+  <circle cx="256" cy="256" r="208" fill="none" stroke="#991B1B" stroke-width="2"/>
+
+  <!-- Traditional Sun Rays / Grain Burst -->
+  <g stroke="#D97706" stroke-width="3" stroke-linecap="round" opacity="0.8">
+    <line x1="256" y1="56" x2="256" y2="76" />
+    <line x1="256" y1="436" x2="256" y2="456" />
+    <line x1="56" y1="256" x2="76" y2="256" />
+    <line x1="436" y1="256" x2="456" y2="256" />
+    <line x1="115" y1="115" x2="129" y2="129" />
+    <line x1="383" y1="383" x2="397" y2="397" />
+    <line x1="115" y1="397" x2="129" y2="383" />
+    <line x1="383" y1="129" x2="397" y2="115" />
+  </g>
+
+  <!-- Sacred Kalash / Handi Icon in Center -->
+  <!-- Base of Kalash -->
+  <path d="M196 360 C196 372, 316 372, 316 360 L300 348 L212 348 Z" fill="url(#goldGrad)" />
+  <!-- Body of Pot -->
+  <path d="M176 270 C160 330, 210 350, 256 350 C302 350, 352 330, 336 270 C330 240, 300 230, 280 220 L232 220 C212 230, 182 240, 176 270 Z" fill="url(#terracottaGrad)" />
+  <!-- Traditional Neck Band -->
+  <path d="M220 220 L292 220 L288 206 L224 206 Z" fill="url(#goldGrad)" stroke="#7F1D1D" stroke-width="2"/>
+  <ellipse cx="256" cy="204" rx="40" ry="10" fill="#F59E0B" stroke="#991B1B" stroke-width="3"/>
+
+  <!-- Wheat Sheaf / Sacred Coconut / Flame atop Kalash -->
+  <!-- Sacred Diya Flame -->
+  <path d="M256 120 C240 155, 230 178, 230 196 C230 210, 242 220, 256 220 C270 220, 282 210, 282 196 C282 178, 272 155, 256 120 Z" fill="url(#goldGrad)" />
+  <path d="M256 142 C248 165, 242 180, 242 192 C242 200, 248 208, 256 208 C264 208, 270 200, 270 192 C270 180, 264 165, 256 142 Z" fill="#FDE68A" />
+
+  <!-- Symmetrical Grain / Wheat Ears flanking the Kalash -->
+  <g fill="url(#goldGrad)" stroke="#991B1B" stroke-width="1.5">
+    <!-- Left Wheat Grains -->
+    <path d="M165 240 C145 220, 135 190, 150 175 C165 190, 165 220, 165 240 Z" />
+    <path d="M185 200 C170 175, 165 150, 185 140 C195 160, 190 185, 185 200 Z" />
+    <path d="M210 170 C200 145, 202 120, 218 115 C224 135, 218 158, 210 170 Z" />
+    <!-- Right Wheat Grains -->
+    <path d="M347 240 C367 220, 377 190, 362 175 C347 190, 347 220, 347 240 Z" />
+    <path d="M327 200 C342 175, 347 150, 327 140 C317 160, 322 185, 327 200 Z" />
+    <path d="M302 170 C312 145, 310 120, 294 115 C288 135, 294 158, 302 170 Z" />
+  </g>
+
+  <!-- Traditional Motif Bands across Pot -->
+  <path d="M188 280 Q256 305 324 280" fill="none" stroke="#FEF3C7" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="230" cy="292" r="4" fill="#FEF3C7"/>
+  <circle cx="256" cy="296" r="5" fill="#FEF3C7"/>
+  <circle cx="282" cy="292" r="4" fill="#FEF3C7"/>
+
+  <!-- Ribbon Banner at Bottom with "ESTD 2026" or "BIHAR" -->
+  <path d="M160 400 L352 400 L340 432 L172 432 Z" fill="url(#terracottaGrad)" stroke="#D97706" stroke-width="3"/>
+  <text x="256" y="422" font-family="Georgia, serif" font-size="19" font-weight="900" fill="#FFFDF7" text-anchor="middle" letter-spacing="4">PATNA • BIHAR</text>
+</svg>

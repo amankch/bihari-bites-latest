@@ -83,12 +83,23 @@ export function AdminNav() {
             )}
           </div>
 
-          <h2 className="font-serif text-xl font-bold tracking-tight text-white">
-            BIHARI BITES:
-          </h2>
-          <p className="text-xs text-neutral-400 truncate">
-            {session ? session.name : "Guarded Admin Console"}
-          </p>
+          <div className="flex items-center gap-2.5">
+            <div className="h-9 w-9 rounded-full bg-white/10 p-0.5 border border-amber-400/30 shrink-0">
+              <img
+                src="/images/logo-emblem.svg"
+                alt="Bihari Bites Logo"
+                className="h-full w-full object-contain"
+              />
+            </div>
+            <div>
+              <h2 className="font-serif text-lg font-bold tracking-tight text-white leading-none">
+                BIHARI BITES:
+              </h2>
+              <p className="text-[11px] text-neutral-400 truncate mt-0.5">
+                {session ? session.name : "Guarded Admin Console"}
+              </p>
+            </div>
+          </div>
         </div>
 
         <nav className="space-y-1.5">
